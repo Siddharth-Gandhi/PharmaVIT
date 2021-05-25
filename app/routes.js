@@ -92,25 +92,71 @@ module.exports = function (app, passport) {
   // show the signup form
   app.get('/signup', function (req, res) {
     // render the page and pass in any flash data if it exists
-    const query2 = 'SELECT doc_id, doc_name FROM doctor_1';
-    connection.query(query2, function (err, rows2) {
-      res.render('signup.ejs', {
-        message: req.flash('signupMessage'),
-        rows2: rows2,
-      });
-    });
-    // res.render('signup.ejs', { message: req.flash('signupMessage') });
+    res.render('signup.ejs', { message: req.flash('signupMessage') });
   });
 
   //process the signup form
   app.post(
     '/signup',
     passport.authenticate('local-signup', {
-      successRedirect: '/pathome', // redirect to the secure profile section
+      successRedirect: '/extraPatDetails', // redirect to the secure profile section
       failureRedirect: '/signup', // redirect back to the signup page if there is an error
       failureFlash: true, // allow flash messages
     })
   );
+
+  app.get('/extraPatDetails', function (req, res) {
+    console.log(req.user);
+    const query2 = 'SELECT doc_id, doc_name FROM doctor_1';
+    connection.query(query2, function (err, rows2) {
+      res.render('extraPatDetails.ejs', {
+        rows2: rows2,
+      });
+    });
+  });
+
+  app.post('/extraPatDetails', function (req, res) {
+    console.log(req.user);
+    var patName = req.body.name;
+    var patContact = req.body.contact;
+    var patAddress = req.body.address;
+    var patGender = req.body.patient_gender;
+    var patAge = req.body.patient_age;
+    var patInsuranceId = req.body.patient_insurance_id;
+    var patDoc = req.body.patient_doctor;
+    var query =
+      'INSERT INTO patient_1 (pat_name, contact, gender, insurance_id, age, address,login_id) VALUES \
+      (?,?,?,?,?,?,?)';
+    connection.query(
+      query,
+      [
+        patName,
+        patContact,
+        patGender,
+        patInsuranceId,
+        patAge,
+        patAddress,
+        req.user.login_id,
+      ],
+      function (err, rows) {
+        if (err) {
+          console.log(err);
+        }
+        var query2 = 'INSERT INTO patient_2 VALUES (?,?)';
+        connection.query(
+          query2,
+          [rows.insertId, patDoc],
+          function (err, rows2) {
+            if (err) {
+              console.log(err);
+            }
+
+            res.redirect('/');
+          }
+        );
+      }
+    );
+  });
 
   // =====================================
   // PROFILE SECTION =========================
@@ -812,10 +858,11 @@ module.exports = function (app, passport) {
       "SELECT( bill_1.bill_no), bill_1.payment_mode,medicine.med_name,bill_2.quantity, bill_1.discount, bill_1.total_cost, \
   DATE_FORMAT(bill_1.bill_date,'%d-%m-%Y') AS bill_date FROM bill_1 \
   INNER JOIN patient_1 ON bill_1.pat_id=patient_1.pat_id inner join bill_2 on bill_2.bill_no=bill_1.bill_no\
-  inner join medicine on medicine.med_id=bill_2.med_id  where patient_1.pat_name=? group by bill_no";
-    connection.query(query, [req.user.username], function (err, rows) {
+  inner join medicine on medicine.med_id=bill_2.med_id  where patient_1.login_id =? group by bill_no";
+    connection.query(query, [req.user.login_id], function (err, rows) {
       var temp = req.user.username;
       console.log(temp);
+      console.log(rows);
       res.render('./Patients/patinvoice_history.ejs', {
         user: req.user,
         rows: rows,

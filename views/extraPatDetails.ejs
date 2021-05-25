@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Signup | PharmaVIT</title>
+    <title>Enter More Details | PharmaVIT</title>
     <link
       rel="stylesheet"
       href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
@@ -27,16 +27,11 @@
       style="display: flex; justify-content: center; align-items: center"
     >
       <div class="col-sm-6 col-sm-offset-3">
-        <h1><span class="fa fa-sign-in"></span> Signup</h1>
-
-        <!-- show any messages that come back with authentication -->
-        <% if (message.length > 0) { %>
-        <div class="alert alert-danger"><%= message %></div>
-        <% } %>
+        <h1><span class="fa fa-sign-in"></span> Enter More Details</h1>
 
         <!-- LOGIN FORM -->
-        <form action="/signup" method="post">
-          <div class="form-row">
+        <form action="/extraPatDetails" method="post">
+          <!-- <div class="form-row">
             <div class="form-group col-md-6">
               <label> Username </label>
               <input type="text" class="form-control" name="username" />
@@ -51,7 +46,7 @@
                 maxlength="200"
               />
             </div>
-          </div>
+          </div> -->
           <div class="form-row">
             <div class="form-group col-md-6">
               <label>Name</label>
@@ -122,15 +117,12 @@
           <div class="form-row">
             <div class="form-group col-md-12">
               <button type="submit" class="btn btn-warning btn-lg">
-                Signup
+                Continue
               </button>
             </div>
           </div>
         </form>
 
-        <hr />
-
-        <p>Already have an account? <a href="/login">Login</a></p>
         <!-- <p>Or go <a href="/">home</a>.</p> -->
       </div>
     </div>

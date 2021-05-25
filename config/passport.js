@@ -59,7 +59,7 @@ module.exports = function (passport) {
         // find a user whose email is the same as the forms email
         // we are checking to see if the user trying to login already exists
         // connection.connect();
-        console.log(req);
+        // console.log(req);
         connection.query(
           'SELECT * FROM login WHERE username = ?',
           [username],
@@ -80,11 +80,11 @@ module.exports = function (passport) {
                 password: password,
               };
 
-              var insertQueryLogin =
+              var insertQuerySignUp =
                 "INSERT INTO login ( username, password, role) values (?,?, 'Patient')";
               // connection.connect();
               connection.query(
-                insertQuery,
+                insertQuerySignUp,
                 [
                   newUserMysql.username,
                   //   bcrypt.hashSync(newUserMysql.password, null, null),
@@ -94,7 +94,7 @@ module.exports = function (passport) {
                   console.log('JAI HIND');
                   console.log(err);
                   console.log(rows);
-                  newUserMysql.id = rows[0].insertId;
+                  newUserMysql.login_id = rows.insertId;
 
                   return done(null, newUserMysql);
                 }
