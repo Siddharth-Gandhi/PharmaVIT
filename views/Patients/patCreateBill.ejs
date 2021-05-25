@@ -1,4 +1,4 @@
-  <%- include('../partials/header'); -%>
+<%- include('../partials/header'); -%>
   <title>Generate Bill | E-Pharma</title>
 </head>
 
@@ -13,7 +13,7 @@
           <button class="btn btn-dark" style="margin: 20px 0 15px;"><a class="sliding-link" style="color: #fff;" href="#medicineList">Click here to check medicines list</a></button>
           <form id="formfield" action="\generateBill" method="POST" oninput="calcBill(); calcFinalBill();">
             <div id="printBill">
-              <h3 id="billTitle">E-Pharma | Invoice</h3>
+              <h3 id="billTitle">Cart</h3>
               <br>
               <div class="form-row">
                 <div class="form-group col-md-1">
@@ -22,7 +22,7 @@
                 </div>
                 <div class="form-group col-md-1">
                   <label for="patId">Patient Id</label>
-                  <input class="form-control-plaintext" type="text" name="patId" id="patId" required>
+                  <input class="form-control-plaintext" type="text" name="patId" value= "<%= rows2[0].pat_id %>" id="patId" required>
                 </div>
                 <script>
                   function updatePatId() {
@@ -35,7 +35,7 @@
                 </script>
                 <div class="form-group col-md-3">
                   <label for="patName">Patient Name</label>
-                  <input class="form-control" type="text" name="patName" id="patName" onchange="updateDoc(); updateAge(); updatePatId();" required>
+                  <input class="form-control-plaintext" type="text" name="patName" id="patName" value= "<%= rows2[0].pat_name %>"  readonly required>
                 </div>
                 <script>
                   $( function() {
@@ -51,7 +51,7 @@
                 
                 <div class="form-group col-md-3">
                   <label for="patDocs">Doctor Name</label>
-                  <input class="form-control" type="text" name="patDoc" id="patDocs">
+                  <input class="form-control-plaintext" type="text" name="patDoc" id="patDocs" value= "<%= rows2[0].doc_name %>">
                 </div>
                 <script>
                   function updateDoc() {
@@ -68,7 +68,7 @@
                   </script>
                 <div class="form-group col-md-1">
                   <label for="patAge">Age</label>
-                  <input class="form-control-plaintext" type="number" name="patAge" id="patAge" readonly required>
+                  <input class="form-control-plaintext" type="number" name="patAge" id="patAge" readonly required value= "<%= rows2[0].age %>">
                 </div>
                 <script>
                   function updateAge() {
@@ -130,8 +130,6 @@
                   </select>
                 </div>
                 <div class="form-group col-md-3">
-                  <label for="discount">Discount (In &#x20B9;)</label>
-                  <input type="number" name="discount" min="0" class="form-control" id="discount" value="0">
                 </div>
               </div>
               <div class="form-row">

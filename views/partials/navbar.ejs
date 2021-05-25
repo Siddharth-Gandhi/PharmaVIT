@@ -1,21 +1,39 @@
 <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
-    <a class="navbar-brand col-md-3 col-lg-2 mr-0 px-3" href="/">VIT Pharmacy</a>
-    <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-toggle="collapse"
-      data-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <span>
-      <strong>Login ID</strong>: <%= user.login_id %>
-    </span>
-    <span>
-      <strong>Username</strong>: <%= user.username %>
-    </span>
-    <span>
-      <strong>Role</strong>: <%= user.role %>
-    </span>
-    <ul class="navbar-nav px-3">
-      <li class="nav-item text-nowrap">
-        <a class="nav-link" href="/logout">Sign out</a>
-      </li>
-    </ul>
-  </nav>
+  <!-- <div>
+    Icons made by
+    <a href="https://www.freepik.com" title="Freepik">Freepik</a> from
+    <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>
+  </div> -->
+  <a
+    class="navbar-brand col-md-3 col-lg-2 mr-0 px-3"
+    href="/"
+    style="
+      display: flex;
+      align-items: center;
+      justify-content: space-evenly;
+      font-size: 1.5rem;
+    "
+  >
+    <img src="vitamin-pill.svg" alt="Logo" width="40" />
+    E-Pharma</a
+  >
+  <button
+    class="navbar-toggler position-absolute d-md-none collapsed"
+    type="button"
+    data-toggle="collapse"
+    data-target="#sidebarMenu"
+    aria-controls="sidebarMenu"
+    aria-expanded="false"
+    aria-label="Toggle navigation"
+  >
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <span> <strong>Login ID</strong>: <%= user.login_id %> </span>
+  <span> <strong>Username</strong>: <%= user.username %> </span>
+  <span> <strong>Role</strong>: <%= user.role %> </span>
+  <ul class="navbar-nav px-3">
+    <li class="nav-item text-nowrap">
+      <a class="nav-link" href="/logout">Sign out</a>
+    </li>
+  </ul>
+</nav>
