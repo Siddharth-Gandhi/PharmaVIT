@@ -1,0 +1,81 @@
+<%- include('../partials/header'); -%>
+<title>Home | VIT Pharmacy</title>
+
+</head>
+
+<body>
+<%- include('../partials/navbar'); -%>
+
+<div class="container-fluid">
+  <div class="row">
+    <%- include('../partials/patsidebar'); -%>
+    <%- console.log("G",rows[0]) %>
+    <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
+      <div class="container-fluid">
+        <h2>Patient Details</h2>
+        <form action="/updatePatient" method="post" id="formfield">
+          <div class="form-row">
+            <div class="form-group col-md-2">
+              <label for="pat_Id">Patient ID</label>
+              <input type="text" name="pat_Id" id="pat_Id" class="form-control-plaintext" readonly value="<%= rows[0].pat_id %>">
+            </div>
+            <div class="form-group col-md-4">
+              <label for="patName">Patient Name</label>
+              <input type="text" id="patName" class="form-control-plaintext" readonly value="<%= rows[0].pat_name %>">
+            </div>
+            <div class="form-group col-md-2">
+              <label for="oldUsername">Old Username</label>
+              <input type="text" name="oldUsername" id="oldUsername" class="form-control-plaintext" readonly value="<%= rows[0].username %>" maxlength="40" readonly>
+            </div>
+    
+            <div class="form-group col-md-2">
+              <label for="Username">New Username</label>
+              <input type="text" name="Username" id="Username" class="form-control" value="<%= rows[0].username %> " maxlength="40">
+            </div>
+            <div class="form-group col-md-2">
+              <label for="Contact">Update Contact</label>
+              <input type="text" name="Contact" id="Contact" class="form-control" value="<%= rows[0].contact %>" maxlength="13">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-12">
+              <label for="Address">Update Address</label>
+              <input type="text" name="Address" id="Address" class="form-control" value="<%= rows[0].address %>" maxlength="50">
+            </div>
+          </div>
+          <br>
+          <button type="button" name="btn" value="Submit" id="submitBtn" data-toggle="modal" data-target="#confirm-submit" class="btn btn-dark">Update</button>
+          <div class="modal fade" id="confirm-submit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        Confirm Submit
+                    </div>
+                    <div class="modal-body">
+                        <!-- We display the details entered by the user here -->
+                        Are you sure you want to proceed                          
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                        <a href="#" id="submit" class="btn btn-success success">Submit</a>
+                    </div>
+                </div>
+            </div>
+          </div>
+          <script>
+            $('#submit').click(function(){
+              /* when the submit button in the modal is clicked, submit the form */
+              $('#formfield').submit();
+            });
+          </script>
+        </form>
+      </div>
+    </main>
+    </div>
+    </div>
+  </div>
+</div>
+
+
+    
+<%- include('../partials/footer'); -%>

@@ -1,0 +1,2 @@
+Start xampp as admin and run mysql and run apache server
+nodemon run server.js
