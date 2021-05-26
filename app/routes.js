@@ -454,6 +454,9 @@ module.exports = function (app, passport) {
       medStockIds.push(req.body['medStockId' + i]);
       ++i;
     }
+    medIds.map((x) => +x);
+    medQuantity.map((x) => +x);
+    medStockIds.map((x) => +x);
     console.log(medIds);
     console.log(medQuantity);
     console.log(medStockIds);
@@ -462,10 +465,10 @@ module.exports = function (app, passport) {
     console.log(paymentMode);
     console.log(discount);
     console.log(finalCost);
-    var query1 =
+    let query1 =
       'INSERT INTO bill_1 (payment_mode, discount, pat_id, total_cost, bill_date)\
 		VALUES (?,?,?,?,?)';
-    var billNo;
+    let billNo;
     connection.query(
       query1,
       [paymentMode, discount, patientId, finalCost, billDate],
@@ -475,10 +478,14 @@ module.exports = function (app, passport) {
         }
         console.log(rows);
         billNo = rows.insertId;
-        var query2 =
-          'INSERT INTO bill_2 (bill_no, quantity, med_id) VALUES \
-			(?,?,?)';
+        console.log('AFTER assignment IS ' + billNo);
         for (let index = 0; index < medIds.length; index++) {
+          let query2 =
+            'INSERT INTO bill_2 (bill_no, quantity, med_id) VALUES \
+			(?,?,?)';
+          console.log('Bill no: ' + billNo);
+          console.log('Quantity: ' + medQuantity[index]);
+          console.log('MedIds: ' + medIds[index]);
           connection.query(
             query2,
             [billNo, medQuantity[index], medIds[index]],
@@ -486,14 +493,17 @@ module.exports = function (app, passport) {
               if (err) {
                 console.log(err);
               }
-              console.log('Number of records inserted: ' + rows2.affectedRows);
+              // console.log('Number of records inserted: ' + rows2.affectedRows);
+              console.log(rows2);
             }
           );
         }
       }
     );
+
+    console.log('OUTSIDE SCOPE' + billNo);
     for (var i = 0; i < medIds.length; ++i) {
-      var query3 =
+      let query3 =
         'UPDATE inventory SET total_number=total_number - ? WHERE stock_id = ?';
       connection.query(
         query3,
@@ -503,13 +513,13 @@ module.exports = function (app, passport) {
             console.log(err);
           }
           console.log('Rows affected:', rows3.affectedRows);
-          if (req.user.role === 'Patient') {
-            res.redirect('/patinvoice');
-          } else {
-            res.redirect('/invoiceHistory');
-          }
         }
       );
+    }
+    if (req.user.role === 'Patient') {
+      res.redirect('/patinvoice');
+    } else {
+      res.redirect('/invoiceHistory');
     }
   });
 

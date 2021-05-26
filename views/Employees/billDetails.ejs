@@ -16,7 +16,7 @@
            <div id="printBill">
                 <h3 id="billTitle">PharmaVIT | Invoice</h3>
                 <br>
-                <button class="btn btn-dark addBtn" onclick="calcTotal();">Click to load data</button>
+                <!-- <button class="btn btn-dark addBtn" onclick="calcTotal();">Click to load data</button> -->
                 <br>
                 <div class="form-row">
                   <div class="form-group col-md-1">
@@ -124,5 +124,6 @@
             document.getElementById('totalBillAmt').value = total;
         }
     }
+    window.onload(calcTotal());
 </script>
 <%- include('../partials/footer'); -%>
