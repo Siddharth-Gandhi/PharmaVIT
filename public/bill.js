@@ -75,6 +75,12 @@ function calcTotal(billIdx) {
   } else {
     document.getElementById('medTotal' + billIdx).value = reqMRP * reqQuantity;
   }
+  var curr = Number(document.getElementById('totalBillAmt').value);
+  curr = curr + Number(medCost);
+  document.getElementById('totalBillAmt').value = curr;
+  if (document.getElementById('discount') !== null) {
+    document.getElementById('discount').max = curr - 1;
+  }
 }
 function calcBill() {
   document.getElementById('totalBillAmt').value = Number(0);
@@ -92,7 +98,7 @@ function calcBill() {
       var curr = Number(document.getElementById('totalBillAmt').value);
       curr = curr + Number(medCost);
       document.getElementById('totalBillAmt').value = curr;
-      if (document.getElementById('discout') !== null) {
+      if (document.getElementById('discount') !== null) {
         document.getElementById('discount').max = curr - 1;
       }
     }
@@ -107,6 +113,12 @@ function calcFinalBill() {
       : document.getElementById('discount').value;
   // console.log(discount);
   document.getElementById('finalTotalCost').value = actualTotal - discount;
+  var curr = Number(document.getElementById('totalBillAmt').value);
+  curr = curr + Number(medCost);
+  document.getElementById('totalBillAmt').value = curr;
+  if (document.getElementById('discount') !== null) {
+    document.getElementById('discount').max = curr - 1;
+  }
 }
 
 $('.sliding-link').click(function (e) {

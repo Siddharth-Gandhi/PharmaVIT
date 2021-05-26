@@ -175,9 +175,20 @@ module.exports = function (app, passport) {
       }
       // console.log(rows)
       if (req.user.role != 'Patient') {
-        res.render('./Employees/index.ejs', {
-          user: req.user,
-          rows: rows,
+        // console.log('hello world');
+        let expiredQuery =
+          'SELECT * FROM inventory WHERE expiry_date <= DATE("2022-06-12")';
+        connection.query(expiredQuery, function (err, expiredRows) {
+          if (err) {
+            console.log(err);
+          } else {
+            console.log(expiredRows);
+            res.render('./Employees/index.ejs', {
+              user: req.user,
+              rows: rows,
+              expiredRows: expiredRows,
+            });
+          }
         });
       } else if (req.user.role === 'Patient') {
         //  res.redirect('/pathome');
@@ -364,13 +375,16 @@ module.exports = function (app, passport) {
       var empUsername = rows[0].username;
       //console.log(rows[0].username);
 
-      var Emprem =
-        'delete employee,login from employee INNER join login on employee.login_id=login.login_id where login.username=?';
-      connection.query(Emprem, [empUsername], function (err, rows) {
-        if (err) {
-          console.log(err);
-        }
-        res.redirect('/manageUsers');
+      let adminInventory = 'UPDATE inventory SET emp_id = 42 WHERE emp_id = ?';
+      connection.query(adminInventory, [empId], function (err, rows2) {
+        var Emprem =
+          'delete employee,login from employee INNER join login on employee.login_id=login.login_id where login.username=?';
+        connection.query(Emprem, [empUsername], function (err, rows3) {
+          if (err) {
+            console.log(err);
+          }
+          res.redirect('/manageUsers');
+        });
       });
       //   var queryToRemoveCred = "DELETE FROM login WHERE username = ?";
       //   connection.query(queryToRemoveCred, [empUsername], function (err, rows) {
