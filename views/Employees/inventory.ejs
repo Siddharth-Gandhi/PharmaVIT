@@ -168,6 +168,7 @@
             <table class="table table-bordered table-hover">
               <thead class="thead-dark">
                 <tr>
+                  <th></th>
                   <th>Medicine ID</th>
                   <th>Medicine Name</th>
                   <th>MRP</th>
@@ -177,15 +178,17 @@
               </thead>
               <tbody>
                 <% rows.forEach(function(medicine){ %>
-                  <tr>
-                    <td style="cursor: pointer;" class="" onclick="showHideRow('<%= medicine.med_id %>');"><i class="fas fa-caret-down"></i>&emsp;<%= medicine.med_id %></td>
+                  <tr id="medicine_<%= medicine.med_id %>">
+                    <td style="cursor: pointer;" class="" onclick="showHideRow('<%= medicine.med_id %>');"><i class="fas fa-caret-down"></i>&emsp;</td>
+                    <td ><%= medicine.med_id %></td>
                     <td><%= medicine.med_name %></td>
                     <td>&#x20B9;<%= medicine.mrp %></td>
                     <td><%= medicine.primary_drug %></td>
                     <td><%= medicine.name %></td>
                   </tr>
                   <tr class="thead-light table-active <%= medicine.med_id %>" style="display: none;">
-                    <td>Stock ID</td>
+                    <th class="stockRemove" ></th>
+                    <td >Stock ID</td>
                     <td colspan="3">Expiry Date</td>
                     <td>Total Quantity</td>
                   </tr>
@@ -193,7 +196,13 @@
 
                   <% for (var stock=0; stock < rows1.length; ++stock){ %>
                     <% if (medicine.med_id===rows1[stock].med_id){ %>
-                        <tr class="table-info <%= medicine.med_id %>" style="display: none;">
+                        <tr class="table-info <%= medicine.med_id %>" style="display: none;" id="medicine_<%= medicine.med_id %>_stock_<%= rows1[stock].stock_id %>">
+                          <td class="stockRemove" >
+                                  <form action="/deleteExpiredStock" method="POST" id="stock_<%= rows1[stock].stock_id %>">
+                                    <input name="checkbox" value="<%= medicine.med_id%> <%= rows1[stock].stock_id %>" type="checkbox">
+                                    <!-- onchange="this.form.submit()" -->
+                                  </form>
+                                </td>
                           <td><%= rows1[stock].stock_id %></td>
                           <td colspan="3"><%= rows1[stock].expiry_date %></td>
                           <td ><%= rows1[stock].total_number %></td>
@@ -209,6 +218,52 @@
 
       </main>
     </div>
+        <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+          aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                Confirm Deletion of Stock
+              </div>
+              <div class="modal-body">
+                <!-- We display the details entered by the user here -->
+                Are you sure you want to delete this stock? (Warning: This is irreversible)
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <a href="#" id="submit" class="btn btn-success success">Submit</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
   </div>
+      <script>
+        function showHideRow(row) {
+          $("." + row).toggle();
+        }
+      </script>
+      <script>
+        let formObject;
+      $('input[type="checkbox"]').on('change', function (e) {
+        formObject = this.form;
+          if (e.target.checked) {
+            $('#confirm-delete').modal();
+          }
+        });
+        $('#submit').click(function () {
+          /* when the submit button in the modal is clicked, submit the form */
+          // $('#formfield').submit();
+          formObject.submit();
+        });
+      </script>
+  <script>
+    "<% expiredMedicinesRows.forEach(emRow => { %>"
+      let medicine_row = "medicine_" + "<%= emRow.med_id %>";
+      document.getElementById(medicine_row).classList.add("table-warning");
+      let stock_row = "medicine_" + "<%= emRow.med_id %>" + "_stock_" + "<%= emRow.stock_id %>";
+      document.getElementById(stock_row).classList.add("table-danger");
+    "<% }); %>"
+  </script>
   <%- include('../partials/footer'); -%>
  

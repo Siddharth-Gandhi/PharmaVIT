@@ -177,7 +177,7 @@ module.exports = function (app, passport) {
       if (req.user.role != 'Patient') {
         // console.log('hello world');
         let expiredQuery =
-          'SELECT * FROM inventory WHERE expiry_date <= DATE("2022-06-12")';
+          'SELECT * FROM inventory WHERE expiry_date <= CURRENT_DATE()';
         connection.query(expiredQuery, function (err, expiredRows) {
           if (err) {
             console.log(err);
@@ -688,19 +688,44 @@ module.exports = function (app, passport) {
         connection.query(query3, function (err, rows2) {
           var query4 = 'select * from drug_manufacturer';
           connection.query(query4, function (err, rows3) {
-            res.render('./Employees/inventory.ejs', {
-              user: req.user,
-              rows: rows,
-              rows1: rows1,
-              rows2: rows2,
-              rows3: rows3,
-            });
+            let expiredMedicines =
+              'SELECT stock_id, med_id FROM inventory WHERE expiry_date <= CURRENT_DATE()';
+            connection.query(
+              expiredMedicines,
+              function (err, expiredMedicinesRows) {
+                console.log(expiredMedicinesRows);
+                res.render('./Employees/inventory.ejs', {
+                  user: req.user,
+                  rows: rows,
+                  rows1: rows1,
+                  rows2: rows2,
+                  rows3: rows3,
+                  expiredMedicinesRows: expiredMedicinesRows,
+                });
+              }
+            );
           });
         });
       });
       // res.render('inventory.ejs', {user: req.user, rows: rows});
     });
     // res.render("inventory.ejs", {user: req.user});
+  });
+
+  app.post('/deleteExpiredStock', function (req, res) {
+    let checkbox = req.body.checkbox.split(' ').map((x) => +x);
+    console.log(checkbox);
+    let [medId, stockId] = checkbox;
+    // console.log(medId);
+    let deleteStockQuery =
+      'DELETE FROM inventory WHERE stock_id = ? AND med_id = ?';
+    connection.query(
+      deleteStockQuery,
+      [stockId, medId],
+      function (err, returnedRows) {
+        res.redirect('/inventory');
+      }
+    );
   });
 
   app.post('/addStock', function (req, res) {
@@ -854,7 +879,7 @@ module.exports = function (app, passport) {
       console.log('hello');
 
       if (req.body.remember) {
-        req.session.cookie.maxAge = 1000 * 60 * 3;
+        req.session.cookie.maxAge = 1000 * 60 * 3 * 60;
       } else {
         req.session.cookie.expires = false;
       }
